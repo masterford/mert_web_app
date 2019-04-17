@@ -1,0 +1,46 @@
+<%- myCss.style %>
+
+<h3 class="request-info">You have just updated the status of this Request to 
+	<%if (request.status == 0) {%>Requested
+	<%} else if (request.status == 1) {%>Accepted
+	<%} else {%>Completed<%}%>: </h3>
+<br>
+<table class="outer-list">
+	<tr>
+		<th class="id-head">
+			ID
+		</th>
+		<th class="type-head">
+			TYPE
+		</th>
+		<th class="loc-head">
+			LOCATION
+		</th>
+		<th class="date-head">
+			DATE
+		</th>
+		<th class="phone-head">
+			PHONE NUMBER
+		</th>
+	</tr>
+	<tr class="inner-list">
+		<td class="id-body">
+			<%= request.id %>
+		</td>
+		<td class="type-body">
+			<%= request.type %>
+		</td>
+		<td class="loc-body">
+			(<%= request.latitude %>, <%= request.longitude %>)
+		</td>
+		<td class="date-body">
+			<%= request.date%>
+		</td>
+		<td class="phone-body">
+			<%= request.phoneNumber%>
+		</td>
+	</tr>
+</table>
+<br>
+<br>
+<div class="nav-link"><a href='/all'>All Requests</a></div>

@@ -1,0 +1,45 @@
+<link rel="stylesheet" type="text/css" href="mystyles.css"/>
+
+<html>
+    <body>
+        <div class="login-box">
+        <h3 class="login-title">LOGIN</h3>
+			<form id="login" action="/log" method="get" >
+				<input type="text" name="lusername" placeholder="Username" required="">
+				<input type="password" name="lpassword" placeholder="Password" required="">
+				<p>
+                <input class="radio-input" type="radio" name="lorginization" value="mert" checked> MERT <br>
+                <input class="radio-input" type="radio" name="lorginization" value="police" > Police
+                <p>
+				<input type="submit" value="LOGIN">
+			</form>
+        </div>
+        <div class="register-box">
+            <h3 class="register-title">REGISTER</h3>
+				<form id="reg" action="/register" method="post" onsubmit="confirmPassword();">
+					<input type="text" name="Rusername" placeholder="Username" required="">
+					<input type="password" name="Rpassword" placeholder="Password" id="p" required="">
+					<input type="password" name="Rconfirm_password" placeholder="Confirm Password" id="confirmp"required="">
+					<p>
+					<input class="radio-input" type="radio" name="rorginization" value="mert" checked> MERT <br>
+	                <input class="radio-input" type="radio" name="rorginization" value="police" > Police
+	                <p>
+					<input type="submit" value="REGISTER">
+	            </form>
+        </div>
+        <script type="text/javascript">
+		var passw = document.getElementById('p')
+		var passwc = document.getElementById('confirmp')
+		var reg = document.getElementById('reg')
+        var login = document.getElementById('login')
+
+		function confirmPassword(){
+			if(passw.value != passwc.value){
+		    	alert("Please try again");
+		  	} else {
+		  		reg.submit()
+		  	}
+		}
+	</script>
+     </body>
+</html>

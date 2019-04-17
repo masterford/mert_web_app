@@ -1,0 +1,57 @@
+<%- myCss.style %>
+
+<% if (requests.length != 0) { %>
+	<h1 class="list-title">ACCEPTED REQUESTS:</h1>
+	<br>
+	<table class="outer-list" >
+		<tr>
+			<th class="id-head">
+				ID
+			</th>
+			<th class="type-head">
+				TYPE
+			</th>
+			<th class="status-head">
+				STATUS
+			</th>
+			<th class="loc-head">
+				LOCATION
+			</th>
+			<th class="date-head">
+				DATE
+			</th>
+			<th class="phone-head">
+				PHONE NUMBER
+			</th>
+	<% requests.forEach( (request) => { %>
+		<tr class="inner-list">
+			<td class="id-body">
+				<%= request.id %>
+			</td>
+			<td class="type-body">
+				<%= request.type %>
+			</td>
+			<td class="status-body">
+				<a href="/request?id=<%=request.id%>"><% if (request.status == 0) {%>Requested<% } else if (request.status == 1) { %>Accepted<% } else {%>Completed<% } %></a>
+			</td>
+			<td class="loc-body">
+				(<%= request.latitude %>, <%= request.longitude %>)
+			</td>
+			<td class="date-body">
+				<%= request.date%>
+			</td>
+			<td class="phone-body">
+				<%= request.phoneNumber%>
+			</td>
+		</tr>
+	<% }); %>
+	</table>
+	<br>
+	<br>
+	<div class="nav-link"><a href='/all'>BACK</a></div>
+<%
+ } else {%>
+	<p class="back-text">There are no accepted requests at the moment.</p>
+	<br>
+	<div class="nav-link"><a href='/all'>BACK</a></div>
+<% } %>

@@ -1,0 +1,163 @@
+<style>
+
+	/** { 
+		background-color: black;
+	    color: red;
+	}
+
+	.outer-list {
+		font-size: 500px;
+	}
+
+	.inner-list {
+		font-size: 500px;
+	}*/
+
+	body {
+		padding: 60px;
+	}
+
+	.nav-link {
+		margin: auto;
+		text-align: center;
+		border-style: solid;
+		border-width: 1px;
+		background-color: #87cefa;
+		border-radius: 15px;
+		width: 150px;
+		margin-bottom: 10px;
+		height: 30px;
+		line-height: 30px;
+	}
+
+	.list-title {
+		text-align: center;
+	}
+
+	table, th, td {
+		margin: auto;
+		border: 1px solid black;
+		border-collapse: collapse;
+		padding: 5px;
+		text-align: center;
+	}
+
+	table {
+		width: 100%;
+	}
+
+	.id-head, .id-body {
+		background-color: #4169e1;
+	} 
+
+	.type-head, .type-body {
+		font-weight: bold;
+		background-color: #1e90ff;
+	}
+
+	.status-head, .status-body {
+		background-color: #00bfff;
+	}
+
+	.loc-head, .loc-body {
+		background-color: #87cefa;
+	}
+
+	.date-head, .date-body {
+		background-color: #40e0d0;
+	}
+
+	.phone-head, .phone-body {
+		background-color: #00ffff;
+	}
+
+	.back-text {
+		text-align: center;
+		margin-bottom: 10px;
+	}
+
+
+	/* FOR LOGIN FORM */
+
+
+	.login-box {
+		text-align: center;
+		border-style: solid;
+		border-width: 1px;
+		background-color: #87cefa;
+		border-radius: 15px;
+		width: 50%;
+		margin: auto;
+		margin-bottom: 20px;
+	}
+
+	.register-box {
+		text-align: center;
+		border-style: solid;
+		border-width: 1px;
+		background-color: #00bfff;
+		border-radius: 15px;
+		width: 50%;
+		margin: auto;
+	}
+
+	input {
+		display: block;
+		margin: auto;
+		text-align: center;
+		margin-bottom: 5px;
+	}
+
+	.radio-input {
+		display: inline;
+	}
+
+
+	/* FOR UPDATE FORM */
+
+
+	.request-title {
+		font-size: 25px;
+		text-align: center;
+	}
+
+	input.hidden {
+		display: none;
+	}
+
+	input.one-line {
+		display: inline;
+	}
+
+	.update-status {
+		margin-top: 20px;
+		margin: auto;
+		text-align: center;
+	}
+
+	.request-info {
+		text-align: center;
+	}
+
+
+	/* OTHER */
+
+	.error {
+		text-align: center;
+		font-size: 30px;
+		color: red;
+		font-style: underline;
+	}
+
+	.success {
+		text-align: center;
+		font-size: 30px;
+		color: green;
+		font-style: underline;
+	}
+
+</style>
+
+
+
+

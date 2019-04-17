@@ -1,0 +1,86 @@
+<!-- Request: <br>
+ID: <%= request.id %> <br>
+Type: <%= request.type %> <br>
+Location: (<%= request.latitude %>, <%= request.longitude %>) <br>
+Date: <%= request.date%> <br>
+Phone Number: <%= request.phoneNumber%> <br>
+<form action='/update' method='post'>
+<input name='id' value='<%= request.id %>' hidden>
+Status:
+	<%if (request.status == 0) {%>
+		<input name='status' value='Requested'>
+	<%} else if (request.status == 1) {%>
+		<input name='status' value='Accepted'>
+	<%} else {%>
+		<input name='status' value='Completed'>
+	<%}%>
+<input type='submit' value='Update Status'>
+</form>
+<form action='/delete' method='post'>
+	<input name='id' value='<%= request.id %>' hidden>
+	<input type='submit' value='Delete Request'>
+</form> <br>
+<a href='/all'>All Requests</a> -->
+
+<%- myCss.style %>
+
+<h1 class="request-title">REQUEST:</h1>
+<br>
+<table class="outer-list">
+	<tr>
+		<th class="id-head">
+			ID
+		</th>
+		<th class="type-head">
+			TYPE
+		</th>
+		<th class="loc-head">
+			LOCATION
+		</th>
+		<th class="date-head">
+			DATE
+		</th>
+		<th class="phone-head">
+			PHONE NUMBER
+		</th>
+	</tr>
+	<tr class="inner-list">
+		<td class="id-body">
+			<%= request.id %>
+		</td>
+		<td class="type-body">
+			<%= request.type %>
+		</td>
+		<td class="loc-body">
+			(<%= request.latitude %>, <%= request.longitude %>)
+		</td>
+		<td class="date-body">
+			<%= request.date%>
+		</td>
+		<td class="phone-body">
+			<%= request.phoneNumber%>
+		</td>
+	</tr>
+</table>
+
+<form action='/update' method='post'>
+<input name='id' class="hidden" value='<%= request.id %>' hidden>
+<br>
+<br>
+<div class="update-status">
+	STATUS:
+		<%if (request.status == 0) {%>
+			<input class="one-line" name='status' value='Requested'>
+		<%} else if (request.status == 1) {%>
+			<input class="one-line" name='status' value='Accepted'>
+		<%} else {%>
+			<input class="one-line" name='status' value='Completed'>
+		<%}%>
+	<input class="one-line" type='submit' value='Update Status'>
+</div>
+</form>
+<form action='/delete' method='post'>
+	<input name='id' class="hidden" value='<%= request.id %>' hidden>
+	<input type='submit' value='Delete Request'>
+</form> <br>
+<div class="nav-link"><a href='/all'>All Requests</a></div>
