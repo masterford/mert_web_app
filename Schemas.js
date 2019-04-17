@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 
 // note: your host/port number may be different!
 // mongoose.connect(`mongodb://localhost:${config.portNumber}/mongodb`);
-// mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:3000');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:${config.portNumber}/mongodb');
 
 var Schema = mongoose.Schema;
 
