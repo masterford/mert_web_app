@@ -10,10 +10,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // start at URL/files
 //var popup = require('popups');
+
+
+
 app.use('/files', express.static('files'));
-app.use('/files', (req, res) => {
-    res.redirect('/files/login.html');
-});
 
 var Schemas = require('./Schemas.js');
 
@@ -556,6 +556,10 @@ app.use('/logout', (req, res, next) => {
             }
         });
     }
+});
+
+app.use('/', (req, res) => {
+    res.redirect('/files/login.html');
 });
 
 app.listen(3000,  () =>
