@@ -525,6 +525,68 @@ app.use('/api', (req, res) => {
   }
 });
 
+app.use('/api/check_status', (req, res) => {
+  int reqID = req.query.id;
+  int i = 0;
+  User.find( (err, allUsers) => {
+    if (err) {
+      console.log("Err:" + err);
+      res.type('html').status(500);
+      res.send('Error');
+    } else {
+      allUsers.forEach( (user) => {
+        user.requests.forEach( (req) => {
+          if (reqID == req.id) {
+            i = 1;
+            res.json({
+              'status': req.status
+            });
+          }
+        });
+      });
+    }
+  });
+  if (i == 0) {
+    console.log("Err:" + err);
+    res.type('html').status(500);
+    res.send('Error');
+  }
+});
+
+app.use('/api/remove', (req, res) => {
+  int reqID = req.query.id;
+  if (!reqID) {
+    console.log('No ID');
+    res.type('html').status(500);
+    res.send('Error');
+  } else {
+    User.find( (err, allUsers) => {
+      allUsers.forEach( (user) => {
+        user.requests.forEach( (req) => {
+          if (reqID == req.id) {
+            var index = user.requests.indexOf(req);
+            user.requests.splice(index, 1);
+            user.save((err) => {
+              if (err) {
+                console.log('Issue saving');
+                res.type('html').status(500);
+                res.send('Error');
+              } else {
+                res.json({
+                  'removed': true;
+                });
+              }
+            });
+          }
+        });
+      });
+    });
+  }
+});
+
+app.use('/api/find_police', (req, res) => {
+  
+});
 
 app.use('/term', (req, res, next) => {
     return res.sendFile(path.join(__dirname + '/files/index.html'));
