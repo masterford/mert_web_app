@@ -527,7 +527,7 @@ app.use('/api', (req, res) => {
 
 app.use('/api/check_status', (req, res) => {
   var reqID = req.query.id;
-  int i = 0;
+  var i = 0;
   User.find( (err, allUsers) => {
     if (err) {
       console.log("Err:" + err);
@@ -554,7 +554,7 @@ app.use('/api/check_status', (req, res) => {
 });
 
 app.use('/api/remove', (req, res) => {
-  int reqID = req.query.id;
+  var reqID = req.query.id;
   if (!reqID) {
     console.log('No ID');
     res.type('html').status(500);
@@ -614,6 +614,38 @@ app.use('/logout', (req, res, next) => {
             }
         });
     }
+});
+
+app.use('/loadAllPoliceRequests', (req, res) => {
+
+  console.log("called loadAllPoliceRequests");
+
+  var policeRequests = [];
+
+  User.find( (err, allUsers) => {
+    // console.log(allUsers);
+    allUsers.forEach( (user) => {
+      user.requests.forEach( (req) => {
+        // MAKE JSON OBJECT FROM LATITUDE AND LONGITUDE PAIRS
+        console.log(req.type);
+        if (req.type==="POLICE") {
+          var obj = { latitude : req.latitude, longitude : req.longitude };
+          policeRequests.push(obj);
+          console.log(obj);
+          console.log("\n");
+        }
+      });
+    });
+  });
+
+  var policeRequestsJSON = JSON.stringify(policeRequests);
+
+  // app.set('json spaces', 2);
+  res.setHeader('Content-Type', 'application/json');
+  res.end(policeRequestsJSON);
+  // res.json(policeRequestsJSON);
+  // res.send(policeRequestsJSON);
+
 });
 
 app.use('/', (req, res) => {
