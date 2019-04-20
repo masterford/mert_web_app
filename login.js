@@ -8,11 +8,6 @@ app.set('view engine', 'ejs');
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// start at URL/files
-//var popup = require('popups');
-
-
-
 app.use('/files', express.static('files'));
 
 var Schemas = require('./Schemas.js');
@@ -417,28 +412,28 @@ app.use('/delete', (req, res) => {
         res.send('Error');
     } else {
         User.find( (err, allUsers) => {
-            allUsers.forEach( (user) => {
-                user.requests.forEach( (req) => {
-                    if (reqID == req.id) {
-                        var index = user.requests.indexOf(req);
-                        var request = user.requests[index];
-                        user.requests.splice(index, 1);
-                        user.save((err) => {
-                            if (err) {
-                                console.log('Issue saving');
-                                res.type('html').status(500);
-                                res.send('Error');
-                            } else {
-                                res.render('deleted', {
-                                  request: request,
-                                  myCss : myCss
-                                });
-                            }
-                        });
-                    }
+          allUsers.forEach( (user) => {
+            user.requests.forEach( (req) => {
+              if (reqID == req.id) {
+                var index = user.requests.indexOf(req);
+                var request = user.requests[index];
+                user.requests.splice(index, 1);
+                user.save((err) => {
+                  if (err) {
+                    console.log('Issue saving');
+                    res.type('html').status(500);
+                    res.send('Error');
+                  } else {
+                    res.render('deleted', {
+                      request: request,
+                      myCss : myCss
+                    });
+                  }
                 });
+              }
             });
-        });
+          });
+      });
     }
 });
 
@@ -451,6 +446,9 @@ app.use('/api', (req, res) => {
   var username = req.query.username;
   var phoneNumber = req.query.phoneNumber;
   var password = req.query.password;
+  var reqID = req.query.id;
+  var removeID = req.query.id_remove;
+  var policeEvents = req.query.police;
   if (type) {
     Id.findOne({name : nameID}, (err, idTracker) => {
       if (err) {
@@ -498,7 +496,7 @@ app.use('/api', (req, res) => {
         });
       }
     });
-  } else {
+  } else if (username) {
     console.log('User');
     if (password) {
       var user = new User({
@@ -522,48 +520,32 @@ app.use('/api', (req, res) => {
       res.type('html').status(500);
       res.send('Error');
     }
-  }
-});
-
-app.use('/api/check_status', (req, res) => {
-  var reqID = req.query.id;
-  var i = 0;
-  User.find( (err, allUsers) => {
-    if (err) {
-      console.log("Err:" + err);
-      res.type('html').status(500);
-      res.send('Error');
-    } else {
+  } else if (reqID) {
+    User.find( (err, allUsers) => {
+      var i = 0;
       allUsers.forEach( (user) => {
-        user.requests.forEach( (req) => {
-          if (reqID == req.id) {
+        user.requests.forEach( (request) => {
+          if (reqID == request.id) {
             i = 1;
             res.json({
-              'status': req.status
+              'status': request.status
             });
           }
         });
       });
-    }
-  });
-  if (i == 0) {
-    console.log("Err:" + err);
-    res.type('html').status(500);
-    res.send('Error');
-  }
-});
-
-app.use('/api/remove', (req, res) => {
-  var reqID = req.query.id;
-  if (!reqID) {
-    console.log('No ID');
-    res.type('html').status(500);
-    res.send('Error');
-  } else {
+      if (i == 0) {
+        console.log('Wrong query');
+        res.type('html').status(500);
+        res.send('Error');
+      }
+    });
+  } else if (removeID) {
     User.find( (err, allUsers) => {
+      var i = 0;
       allUsers.forEach( (user) => {
         user.requests.forEach( (req) => {
-          if (reqID == req.id) {
+          if (removeID == req.id) {
+            i = 1;
             var index = user.requests.indexOf(req);
             user.requests.splice(index, 1);
             user.save((err) => {
@@ -573,14 +555,41 @@ app.use('/api/remove', (req, res) => {
                 res.send('Error');
               } else {
                 res.json({
-                  'removed': true,
+                  'removed': true
                 });
               }
             });
           }
         });
       });
+      if (i == 0) {
+        console.log('Wrong query');
+        res.type('html').status(500);
+        res.send('Error');
+      }
     });
+  } else if (policeEvents) {
+    var events = [];
+    User.find( (err, allUsers) => {
+      allUsers.forEach( (user) => {
+        user.requests.forEach( (request) => {
+          if (request.type == "POLICE") {
+            jObj = {
+              'id': request.id.toString(),
+              'status': request.status.toString(),
+              'latitude': request.latitude.toString(),
+              'longitude': request.longitude.toString()
+            }
+            events.push(jObj);
+          } 
+        });
+      });
+      res.json(events);
+    });
+  } else {
+    console.log('Wrong query');
+    res.type('html').status(500);
+    res.send('Error');
   }
 });
 
@@ -614,38 +623,6 @@ app.use('/logout', (req, res, next) => {
             }
         });
     }
-});
-
-app.use('/loadAllPoliceRequests', (req, res) => {
-
-  console.log("called loadAllPoliceRequests");
-
-  var policeRequests = [];
-
-  User.find( (err, allUsers) => {
-    // console.log(allUsers);
-    allUsers.forEach( (user) => {
-      user.requests.forEach( (req) => {
-        // MAKE JSON OBJECT FROM LATITUDE AND LONGITUDE PAIRS
-        console.log(req.type);
-        if (req.type==="POLICE") {
-          var obj = { latitude : req.latitude, longitude : req.longitude };
-          policeRequests.push(obj);
-          console.log(obj);
-          console.log("\n");
-        }
-      });
-    });
-  });
-
-  var policeRequestsJSON = JSON.stringify(policeRequests);
-
-  // app.set('json spaces', 2);
-  res.setHeader('Content-Type', 'application/json');
-  res.end(policeRequestsJSON);
-  // res.json(policeRequestsJSON);
-  // res.send(policeRequestsJSON);
-
 });
 
 app.use('/', (req, res) => {
