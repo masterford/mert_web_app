@@ -8,4 +8,4 @@ Check request status: https://mert-app.herokuapp.com/api/check_status?id=0
 
 Remove request status: https://mert-app.herokuapp.com/api/remove?id=0
 
-All police requests: https://mert-app.herokuapp.com/api/find_police
+All police requests: https://mert-app.herokuapp.com/api/loadAllPoliceRequests
