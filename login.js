@@ -573,7 +573,7 @@ app.use('/api/remove', (req, res) => {
                 res.send('Error');
               } else {
                 res.json({
-                  'removed': true;
+                  'removed': true,
                 });
               }
             });
