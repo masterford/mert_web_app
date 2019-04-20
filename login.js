@@ -526,7 +526,7 @@ app.use('/api', (req, res) => {
 });
 
 app.use('/api/check_status', (req, res) => {
-  int reqID = req.query.id;
+  var reqID = req.query.id;
   int i = 0;
   User.find( (err, allUsers) => {
     if (err) {
@@ -582,10 +582,6 @@ app.use('/api/remove', (req, res) => {
       });
     });
   }
-});
-
-app.use('/api/find_police', (req, res) => {
-  
 });
 
 app.use('/term', (req, res, next) => {
