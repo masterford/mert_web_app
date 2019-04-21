@@ -1,4 +1,4 @@
-<!-- Request: <br>
+<% if (request) {%><!-- Request: <br>
 ID: <%= request.id %> <br>
 Type: <%= request.type %> <br>
 Location: (<%= request.latitude %>, <%= request.longitude %>) <br>
@@ -21,9 +21,12 @@ Status:
 	<input type='submit' value='Delete Request'>
 </form> <br>
 <a href='/all'>All Requests</a> -->
+<% } else {%>
+This request got canceled by the user. <br>
+<% } %>
 
 <%- myCss.style %>
-
+<% if (request) {%>
 <h1 class="request-title">REQUEST:</h1>
 <br>
 <table class="outer-list">
@@ -83,4 +86,5 @@ Status:
 	<input name='id' class="hidden" value='<%= request.id %>' hidden>
 	<input type='submit' value='Delete Request'>
 </form> <br>
+<% } %>
 <div class="nav-link"><a href='/all'>All Requests</a></div>

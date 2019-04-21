@@ -1,5 +1,5 @@
 <%- myCss.style %>
-
+<% if (request) {%>
 <h3 class="request-info">You have just deleted this Request</h3>
 <br>
 <table class="outer-list">
@@ -40,4 +40,7 @@
 </table>
 <br>
 <br>
+<% } else {%>
+This request got canceled by the user. <br>
+<% } %>
 <div class="nav-link"><a href='/all'>All Requests</a></div>

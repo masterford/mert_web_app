@@ -1,5 +1,5 @@
 <%- myCss.style %>
-
+<%if (request) {%>
 <h3 class="request-info">You have just updated the status of this Request to 
 	<%if (request.status == 0) {%>Requested
 	<%} else if (request.status == 1) {%>Accepted
@@ -43,4 +43,7 @@
 </table>
 <br>
 <br>
+<% } else {%>
+This request got canceled by the user. <br>
+<% } %>
 <div class="nav-link"><a href='/all'>All Requests</a></div>

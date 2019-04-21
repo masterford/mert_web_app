@@ -291,6 +291,7 @@ app.use('/all', (req, res) => {
 app.use('/update', (req, res) => {
     var reqID = req.body.id;
     var status = req.body.status;
+    var i = 0;
     if (!reqID || !status) {
         console.log('No ID');
         res.type('html').status(500);
@@ -302,6 +303,7 @@ app.use('/update', (req, res) => {
             allUsers.forEach( (user) => {
                 user.requests.forEach( (req) => {
                     if (reqID == req.id) {
+                        i = 1;
                         var index = user.requests.indexOf(req);
                         var newReq;
                         if (status == 'Accepted') {
@@ -364,6 +366,12 @@ app.use('/update', (req, res) => {
                     }
                 });
             });
+            if (i == 0) {
+              res.render('update', {
+                  request : undefined,
+                  myCss : myCss
+              });
+            }
         });
     }
 });
@@ -373,13 +381,13 @@ app.use('/request', (req, res) => {
     if (!reqID) {
         console.log('No ID');
         res.type('html').status(500);
-        res.send('Error');
+        res.send('Error 0');
     } else {
         User.find( (err, allUsers) => {
             if (err) {
                 console.log(err);
                 res.type('html').status(500);
-                res.send('Error');
+                res.send('Error 1');
             } else {
                 var request;
                 allUsers.forEach((user) => {
@@ -389,16 +397,10 @@ app.use('/request', (req, res) => {
                         }
                     });
                 });
-                if (!request) {
-                    console.log('No request');
-                    res.type('html').status(500);
-                    res.send('Error');
-                } else {
-                    res.render('showOne', {
-                      request : request,
-                      myCss: myCss
-                    });
-                }
+                res.render('showOne', {
+                  request : request,
+                  myCss: myCss
+                });
             }
         });
     }
@@ -406,6 +408,7 @@ app.use('/request', (req, res) => {
 
 app.use('/delete', (req, res) => {
     var reqID = req.body.id;
+    var i = 0;
     if (!reqID) {
         console.log('No ID');
         res.type('html').status(500);
@@ -415,6 +418,7 @@ app.use('/delete', (req, res) => {
           allUsers.forEach( (user) => {
             user.requests.forEach( (req) => {
               if (reqID == req.id) {
+                i = 1;
                 var index = user.requests.indexOf(req);
                 var request = user.requests[index];
                 user.requests.splice(index, 1);
@@ -433,6 +437,12 @@ app.use('/delete', (req, res) => {
               }
             });
           });
+          if (i == 0) {
+            res.render('deleted', {
+              request : undefined,
+              myCss : myCss
+            });
+          }
       });
     }
 });
@@ -448,6 +458,7 @@ app.use('/api', (req, res) => {
   var password = req.query.password;
   var reqID = req.query.id;
   var removeID = req.query.id_remove;
+  var check_username = req.query.check_username;
   var policeEvents = req.query.police;
   if (type) {
     Id.findOne({name : nameID}, (err, idTracker) => {
@@ -585,7 +596,33 @@ app.use('/api', (req, res) => {
         });
       });
       res.json(events);
-    });
+            });
+}else if (check_username){
+        User.findOne({ username : check_username}
+
+        ,(err2, user) =>   {
+            if (err2) {
+                return callback(err)
+            } else if (!user) {
+                var err = new Error('User not found.');
+                err.status = 401;
+                return callback(err);
+            }
+            console.log(password)
+           console.log(user.password)
+            //xx
+            //res.send(password + " " + user.password)
+            if(password === user.password){     //success
+                res.json({
+            'inserted': true
+          });
+            } else { //failure
+                 console.log("Err5:" + err5);
+          res.type('html').status(500);
+          res.send('Errori');
+            }
+            
+        });
   } else {
     console.log('Wrong query');
     res.type('html').status(500);
@@ -623,6 +660,38 @@ app.use('/logout', (req, res, next) => {
             }
         });
     }
+});
+
+app.use('/loadAllPoliceRequests', (req, res) => {
+
+  console.log("called loadAllPoliceRequests");
+
+  var policeRequests = [];
+
+  User.find( (err, allUsers) => {
+    // console.log(allUsers);
+    allUsers.forEach( (user) => {
+      user.requests.forEach( (req) => {
+        // MAKE JSON OBJECT FROM LATITUDE AND LONGITUDE PAIRS
+        console.log(req.type);
+        if (req.type==="POLICE") {
+          var obj = { latitude : req.latitude, longitude : req.longitude };
+          policeRequests.push(obj);
+          console.log(obj);
+          console.log("\n");
+        }
+      });
+    });
+  });
+
+  var policeRequestsJSON = JSON.stringify(policeRequests);
+
+  // app.set('json spaces', 2);
+  res.setHeader('Content-Type', 'application/json');
+  res.end(policeRequestsJSON);
+  // res.json(policeRequestsJSON);
+  // res.send(policeRequestsJSON);
+
 });
 
 app.use('/', (req, res) => {
